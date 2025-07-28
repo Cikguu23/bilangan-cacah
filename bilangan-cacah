@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi Cacah: Kejar 10.000!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f9ff;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2393c5fd' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .btn {
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .number-card {
+            transition: all 0.2s ease;
+        }
+        
+        .number-card:hover {
+            transform: scale(1.05);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .float-delay-1 {
+            animation-delay: 0.5s;
+        }
+        
+        .float-delay-2 {
+            animation-delay: 1s;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+        
+        .quiz-option:hover {
+            background-color: #dbeafe;
+        }
+        
+        .quiz-option.selected {
+            background-color: #bfdbfe;
+            border-color: #3b82f6;
+        }
+        
+        .quiz-option.correct {
+            background-color: #bbf7d0 !important;
+            border-color: #22c55e !important;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #fecaca !important;
+            border-color: #ef4444 !important;
+        }
+        
+        .hero-pattern {
+            background-color: #4158D0;
+            background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+        }
+        
+        .character {
+            filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.15));
+        }
+        
+        .feedback-message {
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .feedback-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .bounce {
+            animation: bounce 2s ease infinite;
+        }
+        
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(14deg); }
+            20% { transform: rotate(-8deg); }
+            30% { transform: rotate(14deg); }
+            40% { transform: rotate(-4deg); }
+            50% { transform: rotate(10deg); }
+            60% { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
+        }
+        
+        .wave {
+            animation: wave 2.5s ease infinite;
+            transform-origin: 70% 70%;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div id="app" class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-600 mb-2">Misi Cacah: Kejar 10.000!</h1>
+            <p class="text-xl text-blue-500">Misi bertahap menyelesaikan soal bilangan cacah hingga level tertinggi</p>
+        </header>
+        
+        <!-- Main Menu -->
+        <div id="main-menu" class="flex flex-col items-center fade-in">
+            <div class="w-full max-w-4xl mb-10 rounded-2xl overflow-hidden shadow-2xl">
+                <div class="hero-pattern p-8 md:p-12 text-white text-center relative">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Bilangan Cacah sampai 10.000</h2>
+                    <p class="text-lg md:text-xl mb-6">Mari belajar tentang bilangan cacah dan nilai tempatnya</p>
+                    
+                    <!-- School Children Characters -->
+                    <div class="flex justify-center space-x-8 mb-8 relative">
+                        <div class="character float">
+                            <svg class="w-24 h-24" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="64" cy="64" r="60" fill="#FFD54F"/>
+                                <circle cx="44" cy="50" r="8" fill="white"/>
+                                <circle cx="44" cy="50" r="4" fill="#333"/>
+                                <circle cx="84" cy="50" r="8" fill="white"/>
+                                <circle cx="84" cy="50" r="4" fill="#333"/>
+                                <path d="M40 80 C55 95, 75 95, 88 80" stroke="#333" stroke-width="4" fill="none"/>
+                                <path d="M30 30 C40 10, 88 10, 98 30" stroke="#FF6F00" stroke-width="8" fill="none"/>
+                                <path d="M30 35 L30 55 M98 35 L98 55" stroke="#FF6F00" stroke-width="4" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="character float-delay-1">
+                            <svg class="w-24 h-24" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="64" cy="64" r="60" fill="#AED581"/>
+                                <circle cx="44" cy="50" r="8" fill="white"/>
+                                <circle cx="44" cy="50" r="4" fill="#333"/>
+                                <circle cx="84" cy="50" r="8" fill="white"/>
+                                <circle cx="84" cy="50" r="4" fill="#333"/>
+                                <path d="M40 80 C55 95, 75 95, 88 80" stroke="#333" stroke-width="4" fill="none"/>
+                                <path d="M64 20 L64 40 M40 40 L88 40" stroke="#558B2F" stroke-width="6" fill="none"/>
+                                <rect x="54" y="40" width="20" height="10" fill="#558B2F"/>
+                            </svg>
+                        </div>
+                        <div class="character float-delay-2">
+                            <svg class="w-24 h-24" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="64" cy="64" r="60" fill="#81D4FA"/>
+                                <circle cx="44" cy="50" r="8" fill="white"/>
+                                <circle cx="44" cy="50" r="4" fill="#333"/>
+                                <circle cx="84" cy="50" r="8" fill="white"/>
+                                <circle cx="84" cy="50" r="4" fill="#333"/>
+                                <path d="M64 80 A20 20 0 0 0 64 90" stroke="#333" stroke-width="4" fill="none"/>
+                                <path d="M30 30 C40 15, 88 15, 98 30" stroke="#01579B" stroke-width="8" fill="none"/>
+                                <path d="M34 30 L34 45 M94 30 L94 45" stroke="#01579B" stroke-width="4" fill="none"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <button id="hero-start-materi-btn" class="btn bg-white text-purple-600 font-bold py-3 px-8 rounded-full text-lg">
+                        Mulai Belajar
+                    </button>
+                </div>
+                
+                <div class="bg-white p-6 flex flex-wrap justify-center gap-6">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 rounded-full p-3 mr-3">
+                            <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Materi Lengkap</h3>
+                            <p class="text-sm text-gray-600">Penjelasan mudah dipahami</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <div class="bg-yellow-100 rounded-full p-3 mr-3">
+                            <svg class="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Quiz Interaktif</h3>
+                            <p class="text-sm text-gray-600">Uji kemampuanmu</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <div class="bg-green-100 rounded-full p-3 mr-3">
+                            <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">Papan Peringkat</h3>
+                            <p class="text-sm text-gray-600">Lihat prestasimu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+                <div class="card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-blue-500 p-4 text-white text-center">
+                        <svg class="w-12 h-12 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                        </svg>
+                        <h2 class="text-xl font-bold mt-2">Materi</h2>
+                    </div>
+                    <div class="p-6 text-center">
+                        <p class="text-gray-600 mb-4">Pelajari konsep bilangan cacah sampai 10.000</p>
+                        <button id="card-start-materi-btn" class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full">
+                            Mulai Belajar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-yellow-500 p-4 text-white text-center">
+                        <svg class="w-12 h-12 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+                        </svg>
+                        <h2 class="text-xl font-bold mt-2">Ikuti Quiz</h2>
+                    </div>
+                    <div class="p-6 text-center">
+                        <p class="text-gray-600 mb-4">Tantang dirimu dengan soal-soal menarik</p>
+                        <button id="card-start-quiz-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-full">
+                            Mulai Quiz
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-green-500 p-4 text-white text-center">
+                        <svg class="w-12 h-12 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                        </svg>
+                        <h2 class="text-xl font-bold mt-2">Ranking</h2>
+                    </div>
+                    <div class="p-6 text-center">
+                        <p class="text-gray-600 mb-4">Lihat peringkat terbaik dari pemain</p>
+                        <button id="card-show-ranking-btn" class="btn bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full">
+                            Lihat Ranking
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Materi Section -->
+        <div id="materi" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-blue-600">Materi Pembelajaran</h2>
+                <button id="back-from-materi-btn" class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    Kembali
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 relative">
+                <div class="flex items-center mb-4">
+                    <div class="bg-blue-500 rounded-full p-2 mr-3">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-blue-600">1. Membaca dan Menulis Bilangan Cacah</h3>
+                </div>
+                
+                <div class="pl-12 mb-6">
+                    <p class="mb-4">Bilangan cacah adalah bilangan bulat yang tidak negatif, dimulai dari 0, 1, 2, 3, dan seterusnya.</p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-bold mb-2">Contoh:</h4>
+                        <ul class="list-disc pl-6 mt-2">
+                            <li>Bilangan 7.350 dibaca: <span class="font-bold">tujuh ribu tiga ratus lima puluh</span></li>
+                            <li>Bilangan 9.500 dibaca: <span class="font-bold">sembilan ribu lima ratus</span></li>
+                            <li>Bilangan 2.150 dibaca: <span class="font-bold">dua ribu seratus lima puluh</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex items-center mb-4">
+                    <div class="bg-blue-500 rounded-full p-2 mr-3">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-blue-600">2. Nilai Tempat Bilangan Cacah</h3>
+                </div>
+                
+                <div class="pl-12 mb-6">
+                    <p class="mb-4">Setiap angka dalam bilangan memiliki nilai tempat yang berbeda.</p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-bold mb-2">Contoh: Bilangan 2.150</h4>
+                        <ul class="list-disc pl-6 mt-2">
+                            <li>Angka 2 menempati nilai tempat "ribuan" (nilai 2000)</li>
+                            <li>Angka 1 menempati nilai tempat "ratusan" (nilai 100)</li>
+                            <li>Angka 5 menempati nilai tempat "puluhan" (nilai 50)</li>
+                            <li>Angka 0 menempati nilai tempat "satuan" (nilai 0)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex items-center mb-4">
+                    <div class="bg-blue-500 rounded-full p-2 mr-3">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2h14a1 1 0 100-2H3zm0 6a1 1 0 000 2h14a1 1 0 100-2H3zm0 6a1 1 0 100 2h14a1 1 0 100-2H3z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-blue-600">3. Membandingkan dan Mengurutkan</h3>
+                </div>
+                
+                <div class="pl-12 mb-6">
+                    <p class="mb-4">Untuk membandingkan dua bilangan, kita gunakan tanda &lt; (lebih kecil dari), &gt; (lebih besar dari), atau = (sama dengan).</p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-bold mb-2">Contoh:</h4>
+                        <ul class="list-disc pl-6 mt-2">
+                            <li>5.734 dan 4.312 → 5.734 &gt; 4.312 (5.734 lebih besar)</li>
+                            <li>7.124 dan 7.197 → 7.124 &lt; 7.197 (7.197 lebih besar)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex items-center mb-4">
+                    <div class="bg-blue-500 rounded-full p-2 mr-3">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                           <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-blue-600">4. Komposisi dan Dekomposisi</h3>
+                </div>
+                
+                <div class="pl-12">
+                    <p class="mb-4">Komposisi adalah menyusun bilangan dari nilai tempat, sedangkan dekomposisi adalah menguraikan bilangan.</p>
+                     <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold mb-2">Dekomposisi:</h4>
+                        <p>6.849 = 6000 + 800 + 40 + 9</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button id="materi-start-quiz-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full inline-flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clip-rule="evenodd"></path>
+                    </svg>
+                    Ikuti Quiz Sekarang
+                </button>
+            </div>
+        </div>
+        
+        <!-- Quiz Section -->
+        <div id="quiz" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-yellow-600">Quiz Matematika</h2>
+                <button id="back-from-quiz-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-full flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    Kembali
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 relative">
+                <div id="quiz-start" class="text-center py-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Siap untuk Memulai Quiz?</h3>
+                    <p class="text-gray-600 mb-6">Ayo uji pengetahuanmu tentang bilangan cacah sampai 10.000!</p>
+                    
+                    <div class="max-w-md mx-auto mb-6">
+                        <label for="player-name" class="block text-left text-gray-700 mb-2">Masukkan Namamu:</label>
+                        <input type="text" id="player-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Nama Kamu">
+                    </div>
+                    
+                    <button id="begin-quiz-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full">
+                        Mulai Quiz
+                    </button>
+                </div>
+                
+                <div id="quiz-questions" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center">
+                            <span class="text-xl font-bold">Soal <span id="current-question">1</span> dari <span id="total-questions">10</span></span>
+                        </div>
+                        <div class="bg-yellow-100 text-yellow-800 py-1 px-3 rounded-full font-bold">
+                            Skor: <span id="score">0</span>
+                        </div>
+                    </div>
+                    
+                    <div id="question-container" class="mb-6">
+                        <p id="question-text" class="text-lg font-bold mb-4">Pertanyaan akan muncul di sini</p>
+                        <div id="options-container" class="space-y-3">
+                        </div>
+                        
+                        <div id="feedback-message" class="feedback-message mt-4 p-3 rounded-lg text-center font-bold">
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button id="next-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-full flex items-center hidden">
+                            Selanjutnya
+                            <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="quiz-result" class="hidden text-center py-8">
+                    <div id="confetti-container" class="absolute top-0 left-0 w-full h-full overflow-hidden"></div>
+                    
+                    <div id="result-icon" class="mx-auto mb-4"></div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Quiz Selesai!</h3>
+                    <p class="text-gray-600 mb-2">Kamu mendapatkan skor:</p>
+                    <div class="text-5xl font-bold text-yellow-500 mb-4"><span id="final-score">0</span> / 10</div>
+                    <p id="result-message" class="text-lg mb-6">Pesan hasil akan muncul di sini</p>
+                    <div class="flex flex-col md:flex-row justify-center gap-4">
+                        <button id="retry-quiz-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-full">
+                            Coba Lagi
+                        </button>
+                        <button id="back-to-menu-from-result-btn" class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full">
+                            Kembali ke Menu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ranking Section -->
+        <div id="ranking" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-green-600">Ranking Terbaik</h2>
+                <button id="back-from-ranking-btn" class="btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    Kembali
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 relative">
+                <div id="podium-container" class="flex justify-center items-end mb-8 space-x-4 h-48">
+                    <!-- Podium will be generated here -->
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-green-500 text-white">
+                                <th class="border border-green-600 p-2">Peringkat</th>
+                                <th class="border border-green-600 p-2">Nama</th>
+                                <th class="border border-green-600 p-2">Skor</th>
+                                <th class="border border-green-600 p-2">Waktu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ranking-table">
+                            <!-- Ranking data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="no-ranking-message" class="text-center mt-8 text-gray-500 italic hidden">
+                    <p>Belum ada data peringkat. Jadilah yang pertama!</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-gray-600 py-4">
+            <p>Copyright &copy; Cikgu Junid 2025</p>
+        </footer>
+    </div>
+
+    <script type="module">
+        // Import fungsi-fungsi yang diperlukan dari Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- START OF FIREBASE CONFIG ---
+        // Konfigurasi Firebase diambil dari variabel global yang disediakan oleh environment.
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'misi-cacah-default';
+        // --- END OF FIREBASE CONFIG ---
+
+        // Inisialisasi Firebase
+        let app, auth, db, rankingsCollection, unsubscribeRankings;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            // Path koleksi untuk data publik sesuai aturan keamanan
+            rankingsCollection = collection(db, 'artifacts', appId, 'public', 'data', 'rankings');
+        } catch (e) {
+            console.error("Error initializing Firebase:", e);
+        }
+        
+        // --- AUTHENTICATION ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User sudah terautentikasi, kita bisa mulai mendengarkan data peringkat.
+                console.log("User authenticated with UID:", user.uid);
+                listenForRankings();
+            } else {
+                // User belum terautentikasi, coba login secara anonim atau dengan token.
+                console.log("User not authenticated. Attempting sign-in.");
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (error) {
+                    console.error("Error during sign-in:", error);
+                }
+            }
+        });
+
+        // --- Firestore Functions ---
+        function listenForRankings() {
+            if (unsubscribeRankings) unsubscribeRankings(); // Hentikan listener sebelumnya jika ada
+            
+            // Kueri untuk mendapatkan semua data peringkat. Pengurutan akan dilakukan di sisi klien.
+            const rankingsQuery = query(rankingsCollection);
+
+            unsubscribeRankings = onSnapshot(rankingsQuery, (snapshot) => {
+                const rankings = [];
+                snapshot.forEach((doc) => {
+                    rankings.push(doc.data());
+                });
+
+                // Lakukan pengurutan di sisi klien (client-side)
+                // Urutkan berdasarkan skor (tertinggi), lalu berdasarkan waktu (tercepat)
+                rankings.sort((a, b) => {
+                    if (b.score !== a.score) {
+                        return b.score - a.score;
+                    }
+                    return a.timeTaken - b.timeTaken;
+                });
+
+                // Ambil 75 peringkat teratas setelah diurutkan
+                const top75Rankings = rankings.slice(0, 75);
+
+                displayRankings(top75Rankings);
+            }, (error) => {
+                console.error("Error fetching rankings:", error);
+            });
+        }
+
+        async function addRankingToFirestore(name, score, timeTaken) {
+            if (!rankingsCollection) {
+                console.error("Firestore is not initialized.");
+                return;
+            }
+            try {
+                await addDoc(rankingsCollection, {
+                    name: name,
+                    score: score,
+                    timeTaken: timeTaken, // dalam detik
+                    createdAt: serverTimestamp()
+                });
+                console.log("Ranking added to Firestore.");
+            } catch (error) {
+                console.error("Error adding ranking to Firestore: ", error);
+            }
+        }
+
+        // --- DOM Elements ---
+        const sections = {
+            'main-menu': document.getElementById('main-menu'),
+            'materi': document.getElementById('materi'),
+            'quiz': document.getElementById('quiz'),
+            'ranking': document.getElementById('ranking')
+        };
+        const quizSections = {
+            'start': document.getElementById('quiz-start'),
+            'questions': document.getElementById('quiz-questions'),
+            'result': document.getElementById('quiz-result')
+        };
+        const playerNameInput = document.getElementById('player-name');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const scoreEl = document.getElementById('score');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainerEl = document.getElementById('options-container');
+        const feedbackMessageEl = document.getElementById('feedback-message');
+        const nextBtn = document.getElementById('next-btn');
+        const finalScoreEl = document.getElementById('final-score');
+        const resultMessageEl = document.getElementById('result-message');
+        const resultIconEl = document.getElementById('result-icon');
+        const confettiContainer = document.getElementById('confetti-container');
+        const rankingTable = document.getElementById('ranking-table');
+        const noRankingMessage = document.getElementById('no-ranking-message');
+        const podiumContainer = document.getElementById('podium-container');
+
+        // --- Quiz variables ---
+        let allQuestions = [];
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+        let playerName = "";
+        let quizStartTime;
+
+        // --- Navigation ---
+        const showSection = (sectionId) => {
+            Object.values(sections).forEach(section => section.classList.add('hidden'));
+            if (sections[sectionId]) {
+                sections[sectionId].classList.remove('hidden');
+                sections[sectionId].classList.add('fade-in');
+            }
+            if (sectionId === 'ranking') {
+                listenForRankings(); // Refresh data saat melihat ranking
+            }
+        };
+
+        const showQuizSection = (sectionId) => {
+            Object.values(quizSections).forEach(section => section.classList.add('hidden'));
+            if (quizSections[sectionId]) {
+                quizSections[sectionId].classList.remove('hidden');
+            }
+        };
+
+        // --- Quiz Logic ---
+        const startQuiz = () => {
+            showSection('quiz');
+            showQuizSection('start');
+        };
+
+        const beginQuiz = () => {
+            playerName = playerNameInput.value.trim();
+            if (!playerName) {
+                playerNameInput.focus();
+                playerNameInput.classList.add('border-red-500');
+                return;
+            }
+            playerNameInput.classList.remove('border-red-500');
+
+            showQuizSection('questions');
+            quizQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 10);
+            currentQuestionIndex = 0;
+            score = 0;
+            quizStartTime = new Date();
+            totalQuestionsEl.textContent = quizQuestions.length;
+            displayQuestion();
+        };
+
+        const displayQuestion = () => {
+            answered = false;
+            feedbackMessageEl.classList.remove('show');
+            nextBtn.classList.add('hidden');
+            const question = quizQuestions[currentQuestionIndex];
+            
+            currentQuestionEl.textContent = currentQuestionIndex + 1;
+            scoreEl.textContent = score;
+            questionTextEl.innerHTML = question.question; // Use innerHTML for potential formatting
+            optionsContainerEl.innerHTML = '';
+
+            const shuffledOptions = [...question.options].sort(() => 0.5 - Math.random());
+
+            shuffledOptions.forEach(option => {
+                const optionButton = document.createElement('button');
+                optionButton.className = 'quiz-option w-full text-left p-4 rounded-lg border-2 border-gray-200 transition-all duration-200';
+                optionButton.innerHTML = option;
+                optionButton.onclick = () => selectAnswer(optionButton, option, question.answer);
+                optionsContainerEl.appendChild(optionButton);
+            });
+        };
+
+        const selectAnswer = (button, selectedOption, correctAnswer) => {
+            if (answered) return;
+            answered = true;
+
+            const isCorrect = selectedOption === correctAnswer;
+            
+            if (isCorrect) {
+                score++;
+                showFeedback(true, "Jawaban Benar!");
+            } else {
+                showFeedback(false, `Jawaban salah. Yang benar adalah: ${correctAnswer}`);
+            }
+
+            Array.from(optionsContainerEl.children).forEach(btn => {
+                btn.disabled = true;
+                if (btn.innerHTML === correctAnswer) {
+                    btn.classList.add('correct');
+                } else if (btn === button) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            nextBtn.classList.remove('hidden');
+            if (currentQuestionIndex === quizQuestions.length - 1) {
+                nextBtn.textContent = "Lihat Hasil";
+            } else {
+                nextBtn.textContent = "Selanjutnya";
+            }
+        };
+
+        const nextQuestion = () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                displayQuestion();
+            } else {
+                endQuiz();
+            }
+        };
+
+        const endQuiz = () => {
+            const timeTaken = Math.round((new Date() - quizStartTime) / 1000); // in seconds
+            showQuizSection('result');
+            finalScoreEl.textContent = score;
+
+            let message = "";
+            let icon = "";
+
+            if (score >= 9) {
+                message = "Luar biasa! Kamu adalah master bilangan cacah!";
+                icon = '🏆';
+                createConfetti();
+            } else if (score >= 7) {
+                message = "Bagus sekali! Pemahamanmu sudah sangat baik!";
+                icon = '�';
+            } else if (score >= 5) {
+                message = "Cukup baik! Teruslah berlatih ya!";
+                icon = '👍';
+            } else {
+                message = "Jangan menyerah! Coba pelajari materinya lagi.";
+                icon = '💪';
+            }
+            resultMessageEl.textContent = message;
+            resultIconEl.innerHTML = `<div class="text-6xl">${icon}</div>`;
+            
+            // Simpan skor ke Firestore
+            addRankingToFirestore(playerName, score, timeTaken);
+        };
+
+        const showFeedback = (isCorrect, message) => {
+            feedbackMessageEl.textContent = message;
+            feedbackMessageEl.className = 'feedback-message mt-4 p-3 rounded-lg text-center font-bold show';
+            if (isCorrect) {
+                feedbackMessageEl.classList.add('bg-green-100', 'text-green-800');
+            } else {
+                feedbackMessageEl.classList.add('bg-red-100', 'text-red-800');
+            }
+        };
+        
+        // --- Ranking Display ---
+        const displayRankings = (rankings) => {
+            if (rankings.length === 0) {
+                noRankingMessage.classList.remove('hidden');
+                rankingTable.innerHTML = '';
+                podiumContainer.innerHTML = '';
+                return;
+            }
+
+            noRankingMessage.classList.add('hidden');
+            displayPodium(rankings.slice(0, 3));
+            displayRankingTable(rankings);
+        };
+
+        const displayPodium = (top3) => {
+            podiumContainer.innerHTML = '';
+            const podiumOrder = [1, 0, 2]; // Index for 2nd, 1st, 3rd
+            const heights = ['h-32', 'h-40', 'h-24'];
+            const colors = ['bg-slate-400', 'bg-amber-400', 'bg-amber-600'];
+            const icons = ['🥈', '🥇', '🥉'];
+            
+            podiumOrder.forEach((i, podiumIndex) => {
+                if(top3[i]) {
+                    const player = top3[i];
+                    const podiumEl = document.createElement('div');
+                    podiumEl.className = `flex flex-col items-center justify-end w-1/3`;
+                    podiumEl.innerHTML = `
+                        <div class="font-bold text-lg truncate">${player.name}</div>
+                        <div class="text-sm text-gray-600">${player.score}/10</div>
+                        <div class="${heights[podiumIndex]} ${colors[podiumIndex]} w-full rounded-t-lg flex items-center justify-center text-4xl font-bold shadow-lg">
+                           ${icons[podiumIndex]}
+                        </div>
+                    `;
+                    podiumContainer.appendChild(podiumEl);
+                }
+            });
+        };
+
+        const displayRankingTable = (rankings) => {
+             rankingTable.innerHTML = '';
+             rankings.forEach((rank, index) => {
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-green-50' : 'bg-white';
+                row.innerHTML = `
+                    <td class="border p-2 text-center font-bold">${index + 1}</td>
+                    <td class="border p-2">${rank.name}</td>
+                    <td class="border p-2 text-center">${rank.score}</td>
+                    <td class="border p-2 text-center">${rank.timeTaken} detik</td>
+                `;
+                rankingTable.appendChild(row);
+             });
+        };
+
+        // --- Effects ---
+        const createConfetti = () => {
+            confettiContainer.innerHTML = '';
+            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                const size = Math.random() * 8 + 5;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear ${Math.random() * 2}s infinite`;
+                confettiContainer.appendChild(confetti);
+            }
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes fall {
+                    to {
+                        transform: translateY(100vh) rotate(${Math.random() * 720}deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            confettiContainer.appendChild(style);
+            setTimeout(() => confettiContainer.innerHTML = '', 5000);
+        };
+
+        // --- Content Population ---
+        const populateQuestions = () => {
+            allQuestions = [
+                { question: "Lambang bilangan dari 'sembilan ribu dua ratus tujuh' adalah...", options: ["9.270", "9.027", "9.207", "9.200"], answer: "9.207" },
+                { question: "Bilangan 5.648 dibaca...", options: ["Lima ribu enam ratus empat delapan", "Lima ribu enam ratus empat puluh delapan", "Lima enam empat delapan", "Lima ribu empat ratus enam puluh delapan"], answer: "Lima ribu enam ratus empat puluh delapan" },
+                { question: "Pada bilangan 8.345, angka yang menempati nilai tempat ratusan adalah...", options: ["8", "3", "4", "5"], answer: "3" },
+                { question: "Nilai angka 7 pada bilangan 7.912 adalah...", options: ["70", "700", "7.000", "7"], answer: "7.000" },
+                { question: "Manakah bilangan yang lebih besar dari 6.590?", options: ["6.509", "6.499", "6.591", "5.999"], answer: "6.591" },
+                { question: "Urutan bilangan dari yang terkecil ke terbesar yang benar adalah...", options: ["2.150, 2.510, 2.015", "2.015, 2.150, 2.510", "2.510, 2.150, 2.015", "2.015, 2.510, 2.150"], answer: "2.015, 2.150, 2.510" },
+                { question: "3.000 + 400 + 50 + 6 = ...", options: ["3.456", "3.0456", "34.56", "3.4056"], answer: "3.456" },
+                { question: "Bentuk dekomposisi dari bilangan 9.081 adalah...", options: ["900+80+1", "9.000+800+1", "9.000+80+1", "9.000+8+1"], answer: "9.000+80+1" },
+                { question: "Aku adalah bilangan yang terdiri dari 5 ribuan, 0 ratusan, 2 puluhan, dan 9 satuan. Siapakah aku?", options: ["5.290", "5.029", "5.209", "5.092"], answer: "5.029" },
+                { question: "Tanda perbandingan yang tepat untuk 4.567 ... 4.576 adalah...", options: ["<", ">", "=", "≠"], answer: "<" },
+                { question: "Bilangan yang terletak di antara 3.125 dan 3.127 adalah...", options: ["3.124", "3.128", "3.126", "3.120"], answer: "3.126" },
+                { question: "Angka 2 pada bilangan 1.234 menempati nilai tempat...", options: ["Satuan", "Puluhan", "Ratusan", "Ribuan"], answer: "Ratusan" },
+            ];
+        };
+
+        // --- Initialization ---
+        function addEventListeners() {
+            document.getElementById('hero-start-materi-btn').addEventListener('click', () => showSection('materi'));
+            document.getElementById('card-start-materi-btn').addEventListener('click', () => showSection('materi'));
+            document.getElementById('card-start-quiz-btn').addEventListener('click', startQuiz);
+            document.getElementById('card-show-ranking-btn').addEventListener('click', () => showSection('ranking'));
+            document.getElementById('back-from-materi-btn').addEventListener('click', () => showSection('main-menu'));
+            document.getElementById('materi-start-quiz-btn').addEventListener('click', startQuiz);
+            document.getElementById('back-from-quiz-btn').addEventListener('click', () => showSection('main-menu'));
+            document.getElementById('begin-quiz-btn').addEventListener('click', beginQuiz);
+            document.getElementById('next-btn').addEventListener('click', nextQuestion);
+            document.getElementById('retry-quiz-btn').addEventListener('click', startQuiz);
+            document.getElementById('back-to-menu-from-result-btn').addEventListener('click', () => showSection('main-menu'));
+            document.getElementById('back-from-ranking-btn').addEventListener('click', () => showSection('main-menu'));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateQuestions();
+            addEventListeners();
+            showSection('main-menu');
+        });
+
+    </script>
+</body>
+</html>
